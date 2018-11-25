@@ -4,10 +4,12 @@ defmodule Arc.Storage.Local do
     path = Path.join(destination_dir, file.file_name)
     path |> Path.dirname() |> File.mkdir_p!()
 
+    suffix = if version == :thumb and scope.type == :video, do: ".jpg", else: ""
+
     if binary = file.binary do
       File.write!(path, binary)
     else
-      File.copy!(file.path, path)
+      File.copy!(file.path <> suffix, path)
     end
 
     {:ok, file.file_name}
